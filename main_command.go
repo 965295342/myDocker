@@ -5,7 +5,6 @@ import (
 	"main/container"
 	"main/subsystem"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -51,7 +50,7 @@ var runCommand = cli.Command{
 		config := &subsystem.ResourceConfig{}
 		config.MemoryLimit = ctx.String("mem")
 		config.CpuCfsQuota = ctx.Int("cpu")
-		logrus.Infof("config.MemoryLimi: %v", config.MemoryLimit)
+
 		Run(tty, cmd, config)
 
 		return nil

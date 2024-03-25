@@ -37,6 +37,7 @@ func NewParentProcess(tty bool) (*exec.Cmd, *os.File) { //pipe is a file
 		cmd.Stderr = os.Stderr
 	}
 	cmd.ExtraFiles = []*os.File{readPipe}
+	cmd.Dir = "/root/busybox" //test for rootfs
 	return cmd, writePipe
 }
 

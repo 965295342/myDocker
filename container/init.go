@@ -17,7 +17,7 @@ import (
 
 func RunContainerInitProcess(command string, args []string) error {
 	log.Infof("Init command:%s", command)
-	mountProc()
+	setUpMount()
 
 	// 从 pipe 中读取命令
 	cmdArray := readUserCommand()
@@ -37,12 +37,4 @@ func RunContainerInitProcess(command string, args []string) error {
 	}
 
 	return nil
-}
-
-func mountProc() {
-	defaultMountFlags := syscall.MS_NOEXEC | syscall.MS_NOSUID | syscall.MS_NODEV //设置一些权限
-	// systemd 加入linux之后, mount namespace 就变成 shared by default, 所以你必须显示声明你要这个新的mount namespace独立。
-	// 即 mount proc 之前先把所有挂载点的传播类型改为 private，避免本 namespace 中的挂载事件外泄。
-	syscall.Mount("", "/", "", syscall.MS_PRIVATE|syscall.MS_REC, "")
-	_ = syscall.Mount("proc", "/proc", "proc", uintptr(defaultMountFlags), "")
 }
