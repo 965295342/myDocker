@@ -1,0 +1,1 @@
+mount -t proc proc /proc 解决proc丢失
