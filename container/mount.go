@@ -33,6 +33,7 @@ func setUpMount() {
 	// 由于前面 pivotRoot 切换了 rootfs，因此这里重新 mount 一下 /dev 目录
 	// tmpfs 是基于 件系 使用 RAM、swap 分区来存储。
 	// 不挂载 /dev，会导致容器内部无法访问和使用许多设备，这可能导致系统无法正常工作，容器部访问SUID和visit time
+	// Tmpfs is a file system that keeps all files in virtual memory and supports swap,
 	syscall.Mount("tmpfs", "/dev", "tmpfs", syscall.MS_NOSUID|syscall.MS_STRICTATIME, "mode=755")
 }
 
@@ -70,6 +71,8 @@ func pivotRoot(root string) error {
 	if err := syscall.Unmount(pivotDir, syscall.MNT_DETACH); err != nil {
 		return errors.WithMessage(err, "unmount pivot_root dir")
 	}
-	// 删除临时文件夹
+	// 	首先创建一个new_root的临时子目录作为put_old，然后调用pivot_root实现切换
+	// chdir("/")
+	// umount put_old and clear
 	return os.Remove(pivotDir)
-}
+} //挂载关系存在与内存当总中，由于内存隔离，容器关闭后，这些mount都不存在

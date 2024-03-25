@@ -10,6 +10,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var MntURL, RootURL string
+
 // NewParentProcess 启动一个新进程
 /*
 这里是父进程，也就是当前进程执行的内容。
@@ -37,7 +39,10 @@ func NewParentProcess(tty bool) (*exec.Cmd, *os.File) { //pipe is a file
 		cmd.Stderr = os.Stderr
 	}
 	cmd.ExtraFiles = []*os.File{readPipe}
-	cmd.Dir = "/root/busybox" //test for rootfs
+	MntURL = "/root/merged/"
+	RootURL = "/root/"
+	NewWorkSpace(RootURL, MntURL)
+	cmd.Dir = MntURL
 	return cmd, writePipe
 }
 

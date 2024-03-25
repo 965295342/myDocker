@@ -6,3 +6,4 @@ import "io/fs"
 
 const Perm0755 fs.FileMode = 0755
 const Perm0644 fs.FileMode = 0644
+const Perm0777 fs.FileMode = 0777
