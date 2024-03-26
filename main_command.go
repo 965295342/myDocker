@@ -29,6 +29,10 @@ var runCommand = cli.Command{
 			Name:  "cpuset",
 			Usage: "cpuset limit ,e.g.:-cpuset 2,4",
 		},
+		cli.StringFlag{
+			Name:  "v",
+			Usage: "volume ,: -v /local/file:/docker/file",
+		},
 	},
 	/*
 		这里是run命令执行的真正函数。
@@ -51,7 +55,9 @@ var runCommand = cli.Command{
 		config.MemoryLimit = ctx.String("mem")
 		config.CpuCfsQuota = ctx.Int("cpu")
 
-		Run(tty, cmd, config)
+		volume := ctx.String("v")
+		//_ = volume
+		Run(tty, cmd, config, volume)
 
 		return nil
 	},

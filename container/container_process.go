@@ -20,7 +20,7 @@ var MntURL, RootURL string
 3.下面的clone参数就是去fork出来一个新进程，并且使用了namespace隔离新创建的进程和外部环境。
 4.如果用户指定了-it参数，就需要把当前进程的输入输出导入到标准输入输出上
 */
-func NewParentProcess(tty bool) (*exec.Cmd, *os.File) { //pipe is a file
+func NewParentProcess(tty bool, volume string) (*exec.Cmd, *os.File) { //pipe is a file
 
 	readPipe, writePipe, err := os.Pipe()
 	if err != nil {
@@ -41,7 +41,7 @@ func NewParentProcess(tty bool) (*exec.Cmd, *os.File) { //pipe is a file
 	cmd.ExtraFiles = []*os.File{readPipe}
 	MntURL = "/root/merged/"
 	RootURL = "/root/"
-	NewWorkSpace(RootURL, MntURL)
+	NewWorkSpace(RootURL, MntURL, volume)
 	cmd.Dir = MntURL
 	return cmd, writePipe
 }
