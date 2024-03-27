@@ -20,6 +20,7 @@ func main() {
 	app.Commands = []cli.Command{
 		initCommand,
 		runCommand,
+		commitCommand,
 	}
 	app.Before = func(ctx *cli.Context) error { //log直接打在stdout上面
 		log.SetFormatter(&log.JSONFormatter{})

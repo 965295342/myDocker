@@ -68,10 +68,28 @@ var initCommand = cli.Command{
 	Usage: "Init container process run user's process in container. Do not call it outside",
 
 	Action: func(ctx *cli.Context) error {
-		log.Infof("init come")
 		cmd := ctx.Args().Get(0)
-		log.Infof("command %s", cmd)
 		err := container.RunContainerInitProcess(cmd, nil)
 		return err
+	},
+}
+
+var commitCommand = cli.Command{
+	Name:  "commit",
+	Usage: "commit container to image e.g.:commit redis",
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name:  "v",
+			Usage: "image save path",
+		},
+	},
+	Action: func(ctx *cli.Context) error {
+		if len(ctx.Args()) < 1 {
+			return fmt.Errorf("commit command missing image name")
+		}
+		imageName := ctx.Args().Get(0)
+		imageSavePath := ctx.String("v")
+		container.CommitContainer(imageName, imageSavePath)
+		return nil
 	},
 }
