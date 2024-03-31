@@ -5,7 +5,6 @@ import (
 	"main/container"
 	"main/subsystem"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 
@@ -33,6 +32,10 @@ var runCommand = cli.Command{
 			Name:  "v",
 			Usage: "volume ,: -v /local/file:/docker/file",
 		},
+		cli.BoolFlag{
+			Name:  "d",
+			Usage: "detach container",
+		},
 	},
 	/*
 		这里是run命令执行的真正函数。
@@ -49,14 +52,19 @@ var runCommand = cli.Command{
 			cmd = append(cmd, arg)
 		}
 
-		log.Infof("cmd : %v", cmd)
+		//tty or detach
 		tty := ctx.Bool("it")
+		detach := ctx.Bool("d")
+		if tty && detach {
+			return fmt.Errorf("-it and -d parameter can not both provided")
+		}
+
 		config := &subsystem.ResourceConfig{}
 		config.MemoryLimit = ctx.String("mem")
 		config.CpuCfsQuota = ctx.Int("cpu")
 
 		volume := ctx.String("v")
-		//_ = volume
+
 		Run(tty, cmd, config, volume)
 
 		return nil

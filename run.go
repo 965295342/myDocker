@@ -34,8 +34,11 @@ func Run(tty bool, cmd []string, config *subsystem.ResourceConfig, volume string
 	// 在子进程创建后通过管道来发送参数
 	sendInitCommand(cmd, writePipe)
 
-	_ = parent.Wait()
-	container.DeleteWorkSpace(container.RootURL, container.MntURL, volume)
+	if tty {
+		_ = parent.Wait()
+		container.DeleteWorkSpace(container.RootURL, container.MntURL, volume)
+	}
+
 	//os.Exit(-1)
 }
 
